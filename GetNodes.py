@@ -7,6 +7,7 @@
 
 from base64 import b64decode
 from bs4 import BeautifulSoup
+import chardet
 import requests
 import time
 import sys
@@ -18,7 +19,7 @@ headers = {
 }
 
 input_file = "urls.txt"
-output_file = "index.html"
+output_file = "README.md"
 targets = []
 
 
@@ -41,22 +42,27 @@ def openf(file, operator, content=""):
 
 # Get time
 lt = time.localtime(time.time())
-update_time = "更新时间: " + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()) + "\n"
+update_time = "Update Time: " + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()) + "\n\n'''"
 
 
 # Get share urls
+# Supported: clashnode.cc, v2raya.com
 print("Get share urls...")
 # 1、freeclashnode.com
-# https://www.freeclashnode.com/uploads/2025/01/0-20250108.txt
-for i in range(5):
-    tmp = 'https://www.freeclashnode.com/uploads/{0}/{1}/{3}-{0}{1}{2}.txt'.format(lt.tm_year, lt.tm_mon, lt.tm_mday, i)
+# https://node.clashnode.cc/uploads/2025/01/0-20250121.txt
+# winxraygithub.github.io
+for i in range(4):
+    tmp = 'https://node.clashnode.cc/uploads/{0}/0{1}/{3}-{0}0{1}{2}.txt'.format(lt.tm_year, lt.tm_mon, lt.tm_mday, i)
     targets.append(tmp)
+
 #2、v2raya.com
 web_url = 'https://v2raya.net/free-nodes/free-v2ray-node-subscriptions.html'
-# response = requests.get(web_url, headers = headers)
-soup = BeautifulSoup(open("untitled.html", encoding='utf-8'), 'lxml')
+response = requests.get(web_url, headers = headers).content
+soup = BeautifulSoup(response, 'lxml')
+# soup = BeautifulSoup(open("untitled.html", encoding='utf-8'), 'lxml')
 for i in soup.find_all(string=re.compile('https://console.stableproxy.top/api/v1/client/subscribe')):
     targets.append(i)
+
 
 # Input share urls
 '''
@@ -81,9 +87,11 @@ targets = target.split('\n')
 
 # Get share content
 print("Get share content...")
-
 urls = ""
+j = 0
 for i in targets:
+    print(j, j / len(targets) * 100)
+    j += 1
     content = requests.get(i, headers=headers).content.decode()
 
     # print(content)
@@ -94,9 +102,16 @@ for i in targets:
 
     pad_num = len(content) % 4
     content = content[:len(content)-pad_num]
-    add_ctt = b64decode(content).decode()
+    
+    # Decoding
+    decoded = b64decode(content)
+    #detect_result = chardet.detect(decoded)
+    #coding = detect_result['encoding']
+    #print(decoded, detect_result, coding)
+    add_ctt = decoded.decode('unicode_escape')
+
     urls += add_ctt
     # print(add_ctt)
 
 with open(output_file, "w", encoding='utf-8') as f:
-    f.write(urls)
+    f.write(update_time + urls + "\n'''")
