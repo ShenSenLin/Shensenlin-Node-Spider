@@ -11,6 +11,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - run: pip install -r requirements.txt
+      - run: echo "Try to install dependency libraries"
+      - run: pip install -r .\requirements.txt
+      - run: echo "Finished...Theoretically"
       - run: python3 .\GetNodes.py
       - run: .\push.bat
