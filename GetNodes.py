@@ -40,7 +40,7 @@ for i in range(4):
 #2、v2raya.com
 web_url = 'https://v2raya.net/free-nodes/free-v2ray-node-subscriptions.html'
 response = requests.get(web_url, headers = headers).content
-soup = BeautifulSoup(response, 'lxml')
+soup = BeautifulSoup(response, 'html.parser')
 # soup = BeautifulSoup(open("untitled.html", encoding='utf-8'), 'lxml')
 for i in soup.find_all(string=re.compile('https://console.stableproxy.top/api/v1/client/subscribe')):
     targets.append(i)
