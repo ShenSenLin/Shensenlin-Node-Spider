@@ -4,7 +4,7 @@ run-name: Auto Update Nodes
 on:
   #push?
   schedule:
-    - corn: 0 8 * * *
+    - cron: 0 8 * * *
 
 permissions:
   contents: write  
