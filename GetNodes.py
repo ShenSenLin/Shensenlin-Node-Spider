@@ -94,5 +94,3 @@ urls = re.sub('\n+', '\n', urls)
 
 with open(output_file, "w", encoding='utf-8') as f:
     f.write(update_time + urls + "\n```")
-
-input('Enter to exit...')
