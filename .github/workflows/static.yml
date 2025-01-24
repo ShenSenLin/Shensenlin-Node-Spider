@@ -2,9 +2,9 @@ name: Deploy static content to Pages
 run-name: Auto Update Nodes
 
 on:
-  push
-  # schedule:
-  #   - corn: 0 8 * * *
+  #push
+  schedule:
+    - corn: 0 8 * * *
 
 permissions:
   contents: write  

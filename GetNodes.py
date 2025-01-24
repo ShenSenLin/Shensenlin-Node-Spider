@@ -19,7 +19,6 @@ headers = {
 }
 
 input_file = "urls.txt"
-output_file = "README.md"
 targets = []
 
 
@@ -92,5 +91,8 @@ for i in targets:
 
 urls = re.sub('\n+', '\n', urls)
 
-with open(output_file, "w", encoding='utf-8') as f:
+with open("README.md", "w", encoding='utf-8') as f:
+    f.write(update_time + urls + "\n```")
+
+with open("index.html", "w", encoding='utf-8') as f:
     f.write(update_time + urls + "\n```")
