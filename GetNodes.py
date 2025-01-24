@@ -27,7 +27,7 @@ targets = []
 
 # Get time
 lt = time.localtime(time.time())
-update_time = "Update Time: " + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()) + "\n\n```"
+update_time = "## Update Time: " + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()) + "\n\n```"
 
 
 # Get share urls
@@ -91,6 +91,8 @@ for i in targets:
     add_ctt = b64decode(content).decode('unicode_escape')
 
     urls += add_ctt
+
+urls = re.sub('\n+', '\n', urls)
 
 with open(output_file, "w", encoding='utf-8') as f:
     f.write(update_time + urls + "\n```")
