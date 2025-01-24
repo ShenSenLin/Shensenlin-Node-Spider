@@ -8,7 +8,6 @@
 
 from base64 import b64decode
 from bs4 import BeautifulSoup
-import chardet
 import requests
 import time
 import sys

@@ -11,6 +11,6 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - run: pip install bs4
+      - run: pip install -r requirements.txt
       - run: python3 .\GetNodes.py
       - run: .\push.bat
