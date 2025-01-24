@@ -7,13 +7,12 @@
 """
 
 from base64 import b64decode
-from beautifulsoup4 import BeautifulSoup
+from bs4 import BeautifulSoup
 import requests
 import time
 import sys
 import re
 
-sys.exit()
 
 headers = {
     'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0'
