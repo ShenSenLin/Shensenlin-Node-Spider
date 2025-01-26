@@ -6,8 +6,8 @@
 这两个基本上就涵盖了网上能找到的绝大多数节点（非github)
 """
 
-from base64 import b64decode
 from bs4 import BeautifulSoup
+import base64
 import requests
 import time
 import sys
@@ -32,8 +32,10 @@ update_time = "## Update Time: " + time.strftime('%Y-%m-%d %H:%M:%S', time.local
 print("Get share urls...")
 # 1、freeclashnode.com
 # https://node.clashnode.cc/uploads/2025/01/0-20250121.txt
+tm_mon = str(lt.tm_mon) if lt.tm_mon < 10 else '0'+str(lt.tm_mon)
+tm_mday = str(lt.tm_mday) if lt.tm_mday < 10 else '0'+str(lt.tm_mday)
 for i in range(4):
-    tmp = 'https://node.clashnode.cc/uploads/{0}/0{1}/{3}-{0}0{1}{2}.txt'.format(lt.tm_year, lt.tm_mon, lt.tm_mday, i)
+    tmp = 'https://node.clashnode.cc/uploads/{0}/0{1}/{3}-{0}0{1}{2}.txt'.format(lt.tm_year, tm_mon, tm_mday, i)
     targets.append(tmp)
 
 #2、v2raya.com
@@ -85,14 +87,19 @@ for i in targets:
     content = content[:len(content)-pad_num]
     
     # Decoding
-    add_ctt = b64decode(content).decode('unicode_escape')
+    add_ctt = base64.b64decode(content).decode('unicode_escape')
 
     urls += add_ctt
 
-urls = re.sub('\n+', '\n', urls)
+
+# B64 encode
+urls = urls.encode()
+urls = base64.b64encode(urls).decode('unicode_escape')
+
+urls = update_time + urls + "\n```"
 
 with open("README.md", "w", encoding='utf-8') as f:
-    f.write(update_time + urls + "\n```")
+    f.write(urls)
 
 with open("index.html", "w", encoding='utf-8') as f:
-    f.write(update_time + urls + "\n```")
+    f.write(urls)
