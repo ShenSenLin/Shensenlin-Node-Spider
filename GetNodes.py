@@ -91,6 +91,13 @@ for i in targets:
 
     urls += add_ctt
 
+urls_lst = list(set(urls.split('\n')))
+urls = ""
+for i in urls_lst:
+    i = i.strip()
+    if i != '':
+        urls += i + '\n'
+urls = urls[:-1]
 
 # B64 encode
 urls = urls.encode()
