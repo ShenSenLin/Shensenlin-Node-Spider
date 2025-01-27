@@ -24,7 +24,7 @@ targets = []
 
 # Get time
 lt = time.localtime(time.time())
-update_time = "## Update Time: " + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()) + "\n\n\n```"
+update_time = "## Update Time: " + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()) + "\n\n```\n"
 
 
 # Get share urls
