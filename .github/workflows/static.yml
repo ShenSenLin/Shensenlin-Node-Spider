@@ -4,7 +4,7 @@ run-name: Auto Update Nodes
 on:
   #push?
   schedule:
-    - cron: 0 1 * * *
+    - cron: 0 19 * * *
 
 permissions:
   contents: write  
@@ -28,4 +28,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .\
+          publish_dir: ./public
