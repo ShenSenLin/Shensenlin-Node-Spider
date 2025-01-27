@@ -8,10 +8,12 @@
 
 from bs4 import BeautifulSoup
 import base64
+import datetime
 import requests
 import time
 import sys
 import re
+import pytz
 
 
 headers = {
@@ -24,7 +26,10 @@ targets = []
 
 # Get time
 lt = time.localtime(time.time())
-update_time = "## Update Time: " + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()) + "\n\n```\n"
+tz = pytz.timezone("Asia/Shanghai")
+now = datetime.datetime.now(tz)
+formatted_time = now.strftime("%Y-%m-%d %H:%M:%S")
+update_time = "## Update Time: " + formatted_time + "\n```\n"
 
 
 # Get share urls
