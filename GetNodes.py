@@ -30,17 +30,16 @@ tz = pytz.timezone("Asia/Shanghai")
 now = datetime.datetime.now(tz)
 formatted_time = now.strftime("%Y-%m-%d %H:%M:%S")
 update_time = "## Update Time: " + formatted_time + "\n```\n"
-
+tm_mon = str(lt.tm_mon) if lt.tm_mon >= 10 else '0'+str(lt.tm_mon)
+tm_mday = str(lt.tm_mday) if lt.tm_mday >= 10 else '0'+str(lt.tm_mday)
 
 # Get share urls
 # Supported: clashnode.cc, v2raya.com
 print("Get share urls...")
 # 1、freeclashnode.com
 # https://node.clashnode.cc/uploads/2025/01/0-20250121.txt
-tm_mon = str(lt.tm_mon) if lt.tm_mon < 10 else '0'+str(lt.tm_mon)
-tm_mday = str(lt.tm_mday) if lt.tm_mday < 10 else '0'+str(lt.tm_mday)
 for i in range(4):
-    tmp = 'https://node.clashnode.cc/uploads/{0}/0{1}/{3}-{0}0{1}{2}.txt'.format(lt.tm_year, tm_mon, tm_mday, i)
+    tmp = 'https://node.clashnode.cc/uploads/{0}/{1}/{3}-{0}{1}{2}.txt'.format(lt.tm_year, tm_mon, tm_mday, i)
     targets.append(tmp)
 
 #2、v2raya.com
@@ -51,6 +50,14 @@ soup = BeautifulSoup(response, 'html.parser')
 for i in soup.find_all(string=re.compile('https://console.stableproxy.top/api/v1/client/subscribe')):
     targets.append(i)
 
+# mibei77.com
+root_url = "https://www.mibei77.com"
+response = requests.get(url=root_url, headers=headers).content
+soup = BeautifulSoup(response, 'html.parser')
+page_url = soup.find_all(class_='entry-title')[1]
+
+for i in targets: print(i)
+# sys.exit(0)
 
 # Input share urls
 '''
