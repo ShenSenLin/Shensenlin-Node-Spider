@@ -54,7 +54,8 @@ for i in soup.find_all(string=re.compile('https://console.stableproxy.top/api/v1
 root_url = "https://www.mibei77.com"
 response = requests.get(url=root_url, headers=headers).content
 soup = BeautifulSoup(response, 'html.parser')
-page_url = soup.find_all(class_='entry-title')[1]
+with open("mibei.com.html", "w", encoding="utf-8") as f:
+    f.write(soup.prettify())
 
 for i in targets: print(i)
 # sys.exit(0)
