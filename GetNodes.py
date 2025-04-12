@@ -49,14 +49,7 @@ soup = BeautifulSoup(response, 'html.parser')
 # soup = BeautifulSoup(open("untitled.html", encoding='utf-8'), 'lxml')
 for i in soup.find_all(string=re.compile('https://my.stableproxy.top/api/v1/client/subscribe')):
     targets.append(i)
-
-# mibei77.com
-root_url = "https://www.mibei77.com"
-response = requests.get(url=root_url, headers=headers).content
-soup = BeautifulSoup(response, 'html.parser')
-with open("mibei.com.html", "w", encoding="utf-8") as f:
-    f.write(soup.prettify())
-
+    
 for i in targets: print(i)
 # sys.exit(0)
 
