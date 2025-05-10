@@ -7,6 +7,8 @@
 """
 
 from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.common.by import By
 import base64
 import datetime
 import requests
@@ -16,13 +18,26 @@ import re
 import pytz
 
 
-headers = {
-    'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0'
-}
+# -- init -- #
+# 可调参数
+TRY_LIM = 10 # 获取内容尝试次数
 
-input_file = "urls.txt"
+# browse
+headers = {
+    'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0'
+}
 targets = []
 
+try:
+    driver = webdriver.Edge()
+except Exception as e:
+    driver = webdriver.Chrome()
+
+# files
+input_file = "urls.txt"
+
+
+# -- -- #
 
 # Get time
 lt = time.localtime(time.time())
@@ -32,6 +47,7 @@ formatted_time = now.strftime("%Y-%m-%d %H:%M:%S")
 update_time = "## Update Time: " + formatted_time + "\n```\n"
 tm_mon = str(lt.tm_mon) if lt.tm_mon >= 10 else '0'+str(lt.tm_mon)
 tm_mday = str(lt.tm_mday) if lt.tm_mday >= 10 else '0'+str(lt.tm_mday)
+
 
 # Get share urls
 # Supported: clashnode.cc, v2raya.com
@@ -47,7 +63,7 @@ web_url = 'https://v2raya.net/free-nodes/free-v2ray-node-subscriptions.html'
 response = requests.get(web_url, headers = headers).content
 soup = BeautifulSoup(response, 'html.parser')
 # soup = BeautifulSoup(open("untitled.html", encoding='utf-8'), 'lxml')
-for i in soup.find_all(string=re.compile('https://my.airplanehub.xyz/api/v1/client/subscribe')):
+for i in soup.find_all(string=re.compile(r'https://.+\..+\.xyz/api/v1/client/subscribe')):
     targets.append(i)
     
 for i in targets: print(i)
@@ -78,21 +94,35 @@ targets = target.split('\n')
 print("Get share content...")
 urls = ""
 j = 0
-for i in targets:
+for op in targets:
     print(j, j / len(targets) * 100)
     j += 1
 
-    content = requests.get(i, headers=headers).content.decode()
-    
+    # 使用 selenium 获取订阅链接内容
+    try_cnt = 1
+    while try_cnt <= TRY_LIM:
+        try:
+            driver.get(op)
+        except Exception as e:
+            print('[ERROR]', e)
+            print('尝试次数：', try_cnt)
+            print('重试...')
+            time.sleep(1)
+        else:
+            try_cnt = TRY_LIM + 25
+            content = driver.find_element(By.TAG_NAME, "body").text
+
+    # 对于未编码内容 - 直接加仓
     if content.find(':') != -1:
         urls += content
         continue
 
-    # Padding
+    # 对于b64编码 - 解码加仓
+    # base64 解码填充
     pad_num = len(content) % 4
     content = content[:len(content)-pad_num]
     
-    # Decoding
+    # base 64 解码
     add_ctt = base64.b64decode(content).decode('unicode_escape')
 
     urls += add_ctt
